@@ -7,6 +7,9 @@ import textwrap
 import json
 import traceback
 from aiolimiter import AsyncLimiter
+'''import asyncio
+import litellm - already done earlier?
+from ecologits import EcoLogits'''
 
 with warnings.catch_warnings():
     # ignore pydantic warnings https://github.com/BerriAI/litellm/issues/2832
@@ -218,6 +221,23 @@ class Chatter:
                         return None # gives up this segment
 
                 return await litellm.acreate(**request)
+            
+                '''async def main() -> None:
+                    response = await litellm.acreate(**request)
+
+                # Get estimated environmental impacts of the inference
+                print(response.impacts)
+
+                asyncio.run(main())
+                return response'''
+
+                '''
+                    response = await litellm.acreate(**request)
+
+                    try to save to json?
+
+                return response'''
+            
 
             except (litellm.exceptions.ServiceUnavailableError,
                     openai.RateLimitError,
