@@ -3,7 +3,7 @@ from pathlib import Path
 from .utils import *
 import ast
 from .codeinfo import get_global_imports, parse_file
-
+from codecarbon import EmissionsTracker
 
 class CodeSegment:
     """Represents a section of code that is missing coverage."""

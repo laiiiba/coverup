@@ -234,7 +234,7 @@ class Chatter:
                 '''
                     response = await litellm.acreate(**request)
 
-                    try to save to json?
+                    try to save to json 
 
                 return response'''
             
