@@ -270,47 +270,57 @@ def log_write(args: argparse.Namespace, seg: CodeSegment, m: str) -> None:
 
 def check_whole_suite(args: argparse.Namespace) -> None:
     """Check whole suite and disable any polluting/failing tests."""
-    import pytest_cleanslate.reduce as reduce
+    
+    integration_check_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'integration_check', output_dir = 'integration_check_codecarbon_logs', log_level = 'error')
+    integration_check_codecarbon.start()
 
-    pytest_args = (*(("--count", str(args.repeat_tests)) if args.repeat_tests else ()), *args.pytest_args.split())
+    try:
+        import pytest_cleanslate.reduce as reduce
 
-    while True:
-        print("Checking test suite...  ", end='', flush=True)
-        try:
-            results = reduce.run_pytest(args.tests_dir,
-                                        pytest_args=(*pytest_args, *(('-x',) if args.disable_polluting else ())),
-                                        trace=args.debug)
-            if not results.get_first_failed():
-                print("tests ok!")
-                return
-
-        except subprocess.CalledProcessError as e:
-            print(str(e) + "\n" + str(e.stdout, 'UTF-8', errors='ignore'))
-            sys.exit(1)
-
-        if args.disable_failing:
-            failed = list(results.get_failed())
-            print(f"{len(failed)} test(s)/module(s) failed, disabling...")
-            to_disable = {Path(reduce.get_module(t)) for t in failed}
-
-        else:
+        pytest_args = (*(("--count", str(args.repeat_tests)) if args.repeat_tests else ()), *args.pytest_args.split())
+        
+        while True:
+            print("Checking test suite...  ", end='', flush=True)
             try:
-                reduction = reduce.reduce(tests_path=args.tests_dir, results=results,
-                                          pytest_args=pytest_args, trace=args.debug)
+                results = reduce.run_pytest(args.tests_dir,
+                                            pytest_args=(*pytest_args, *(('-x',) if args.disable_polluting else ())),
+                                            trace=args.debug)
+                if not results.get_first_failed():
+                    print("tests ok!")
+                    return
+
             except subprocess.CalledProcessError as e:
                 print(str(e) + "\n" + str(e.stdout, 'UTF-8', errors='ignore'))
                 sys.exit(1)
 
-            if 'error' in reduction:
-                sys.exit(1)
+            if args.disable_failing:
+                failed = list(results.get_failed())
+                print(f"{len(failed)} test(s)/module(s) failed, disabling...")
+                to_disable = {Path(reduce.get_module(t)) for t in failed}
 
-            # FIXME add check for disabling too much
-            # FIXME could just disable individual tests rather than always entire modules
-            to_disable = {Path(reduce.get_module(m)) for m in (reduction['modules'] + reduction['tests'])}
+            else:
+                try:
+                    reduction = reduce.reduce(tests_path=args.tests_dir, results=results,
+                                              pytest_args=pytest_args, trace=args.debug)
+                except subprocess.CalledProcessError as e:
+                    print(str(e) + "\n" + str(e.stdout, 'UTF-8', errors='ignore'))
+                    sys.exit(1)
 
-        for t in to_disable:
-            print(f"Disabling {t}")
-            t.rename(t.parent / ("disabled_" + t.name))
+                if 'error' in reduction:
+                    sys.exit(1)
+
+                # FIXME add check for disabling too much
+                # FIXME could just disable individual tests rather than always entire modules
+                to_disable = {Path(reduce.get_module(m)) for m in (reduction['modules'] + reduction['tests'])}
+
+            for t in to_disable:
+                print(f"Disabling {t}")
+                t.rename(t.parent / ("disabled_" + t.name))
+
+    finally:
+        integration_check_emissions = integration_check_codecarbon.stop()
+        print(f"\nTotal CO2 emissions for integration check: {integration_check_emissions} kg", flush=True)
+
 
 
 def find_imports(python_code: str) -> T.List[str]:
@@ -634,7 +644,6 @@ def add_to_pythonpath(dir: Path):
     os.environ['PYTHONPATH'] = str(dir) + (f":{os.environ['PYTHONPATH']}" if 'PYTHONPATH' in os.environ else "")
     sys.path.insert(0, str(dir))
 
-
 def main():
     from collections import defaultdict
     import os
@@ -691,8 +700,7 @@ def main():
                 check_whole_suite(args)
 
             try:
-                print("MODIFIED Measuring coverage...  ", end='', flush=True) 
-                '''test if the local executable is running correctly with changes'''
+                print("Measuring coverage...  ", end='', flush=True)
                 coverage = measure_suite_coverage(tests_dir=args.tests_dir, source_dir=args.package_dir,
                                                   pytest_args=args.pytest_args,
                                                   isolate_tests=args.isolate_tests,
@@ -779,7 +787,7 @@ def main():
 
     if args.prompt_for_tests:
         try:
-            print("MODIFIED Measuring coverage...  ", end='', flush=True)
+            print("Measuring coverage...  ", end='', flush=True)
             coverage = measure_suite_coverage(tests_dir=args.tests_dir, source_dir=args.package_dir,
                                               pytest_args=args.pytest_args,
                                               isolate_tests=args.isolate_tests,
@@ -806,3 +814,4 @@ def main():
                         f.write(f"{module}\n")
 
     return 0
+

@@ -80,8 +80,8 @@ def measure_suite_coverage(*, tests_dir: Path, source_dir: T.Optional[Path], pyt
                     pass
 
     finally:
-        emissions = suite_coverage_codecarbon.stop()
-        print(f"\nTotal CO2 emissions for suite coverage: {emissions} kg", flush=True)
+        suite_coverage_emissions = suite_coverage_codecarbon.stop()
+        print(f"\nTotal CO2 emissions for suite coverage: {suite_coverage_emissions} kg", flush=True)
 
 
 '''def measure_suite_mutation_score(*, tests_dir: Path, source_dir: T.Optional[Path], pytest_args='',
