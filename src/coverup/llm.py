@@ -223,7 +223,7 @@ class Chatter:
 
                 response = await litellm.acreate(**request)
                 
-                '''print(response.impacts)'''
+                '''print(response.impacts) - prints too much'''
 
                 return response            
 
