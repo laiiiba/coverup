@@ -7,9 +7,7 @@ import textwrap
 import json
 import traceback
 from aiolimiter import AsyncLimiter
-'''import asyncio
-import litellm - already done earlier?
-from ecologits import EcoLogits'''
+from ecologits import EcoLogits
 
 with warnings.catch_warnings():
     # ignore pydantic warnings https://github.com/BerriAI/litellm/issues/2832
@@ -22,6 +20,8 @@ litellm.suppress_debug_info = True
 logging.getLogger().setLevel(logging.ERROR)
 # Ignore unavailable parameters
 litellm.drop_params = True
+
+EcoLogits.init(providers=["litellm"])
 
 # Tier 5 rate limits for models; tuples indicate limit and interval in seconds
 # Extracted from https://platform.openai.com/account/limits on 8/30/2024
@@ -208,6 +208,7 @@ class Chatter:
 
     async def _send_request(self, request: dict, ctx: object) -> litellm.ModelResponse | None:
         """Sends the LLM chat request, handling common failures and returning the response."""
+
         sleep = 1
         while True:
             try:
@@ -220,24 +221,11 @@ class Chatter:
                         self._log_msg(ctx, f"Error: too many tokens for rate limit ({e})")
                         return None # gives up this segment
 
-                return await litellm.acreate(**request)
-            
-                '''async def main() -> None:
-                    response = await litellm.acreate(**request)
+                response = await litellm.acreate(**request)
+                
+                '''print(response.impacts)'''
 
-                # Get estimated environmental impacts of the inference
-                print(response.impacts)
-
-                asyncio.run(main())
-                return response'''
-
-                '''
-                    response = await litellm.acreate(**request)
-
-                    try to save to json 
-
-                return response'''
-            
+                return response            
 
             except (litellm.exceptions.ServiceUnavailableError,
                     openai.RateLimitError,
