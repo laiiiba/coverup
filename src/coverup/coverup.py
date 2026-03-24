@@ -319,7 +319,7 @@ def check_whole_suite(args: argparse.Namespace) -> None:
 
     finally:
         integration_check_emissions = integration_check_codecarbon.stop()
-        print(f"\nTotal CO2 emissions for integration check: {integration_check_emissions} kg", flush=True)
+        print(f"\nTotal CO2 emissions for integration check: {integration_check_emissions} kgCO2eq", flush=True)
 
 
 

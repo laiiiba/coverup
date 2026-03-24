@@ -156,7 +156,7 @@ def get_missing_coverage(coverage, line_limit: int = 100) -> T.List[CodeSegment]
 
     finally:
         segmentation_emissions = segmentation_codecarbon.stop()
-        print(f"\nTotal CO2 emissions for segmentation: {segmentation_emissions} kg", flush=True)
+        print(f"\nTotal CO2 emissions for segmentation: {segmentation_emissions} kgCO2eq", flush=True)
 
     return code_segs
 

@@ -8,6 +8,8 @@ import json
 import traceback
 from aiolimiter import AsyncLimiter
 from ecologits import EcoLogits
+import csv
+import os 
 
 with warnings.catch_warnings():
     # ignore pydantic warnings https://github.com/BerriAI/litellm/issues/2832
@@ -222,10 +224,35 @@ class Chatter:
                         return None # gives up this segment
 
                 response = await litellm.acreate(**request)
-                
-                '''print(response.impacts) - prints too much'''
 
-                return response            
+                try: 
+                    energy = response.impacts.energy
+                    min_energy = energy.value.min
+                    max_energy = energy.value.max
+                    mid_energy = (min_energy + max_energy)/2
+                    energy_unit = energy.unit 
+                    '''consider using nowtricity instead'''
+                    gwp = response.impacts.gwp
+                    min_emissions = gwp.value.min
+                    max_emissions = gwp.value.max
+                    mid_emissions = (min_emissions + max_emissions)/2
+                    emissions_unit = gwp.unit
+
+                    file_path = "ecologits_impacts.csv"
+                    file_exists = os.path.isfile(file_path)
+
+                    with open(file_path, mode="a", newline="") as f:
+                        writer = csv.writer(f)
+                        if not file_exists:
+                            writer.writerow(["energy min", "energy max", "energy midpoint", "energy unit", "emissions min", "emissions max", "emissions midpoint", "emissions unit"])
+                        writer.writerow([min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
+                    
+                    print(f"\nTotal CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
+                
+                except Exception as e:
+                    print(f"Failed to log energy: {e}")
+                
+                return response           
 
             except (litellm.exceptions.ServiceUnavailableError,
                     openai.RateLimitError,
@@ -312,4 +339,6 @@ args:{args}
                 })
 
         self._log_msg(ctx, f"Too many function call requests, giving up")
-        return None
+        return None 
+    
+
