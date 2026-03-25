@@ -20,7 +20,7 @@ class GptV2AblatedPrompter(GptV2Prompter):
         self.with_imports = with_imports
         self.with_error_fixing = with_error_fixing
 
-
+    '''seems identical minus flag differences'''
     def initial_prompt(self, segment: CodeSegment) -> T.List[dict]:
         filename = segment.path.relative_to(self.args.src_base_dir)
 
@@ -51,7 +51,7 @@ Respond ONLY with the Python code enclosed in backticks, without any explanation
 """)
         ]
 
-
+    '''seems identical minus flag differences'''
     def error_prompt(self, segment: CodeSegment, error: str) -> T.List[dict] | None:
         if not self.with_error_fixing: return None
         return [mk_message(f"""\
@@ -62,7 +62,7 @@ Modify or rewrite the test to correct it; respond only with the complete Python 
 {error}""")
         ]
 
-
+    '''seems identical minus flag differences'''
     def missing_coverage_prompt(self, segment: CodeSegment,
                                 missing_lines: set, missing_branches: set) -> T.List[dict] | None:
         if not self.with_coverage: return None
@@ -73,7 +73,7 @@ Modify it to correct that; respond only with the complete Python code in backtic
 )
         ]
 
-
+    '''seems identical minus flag'''
     def get_info(self, ctx: CodeSegment, name: str) -> str:
         """
         {
