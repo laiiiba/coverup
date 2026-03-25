@@ -24,6 +24,8 @@ def get_prompters() -> dict[str, T.Callable[[T.Any], Prompter]]:
     from .prompt.gpt_v1 import GptV1Prompter
     from .prompt.gpt_v2 import GptV2Prompter
     from .prompt.gpt_v2_ablated import GptV2AblatedPrompter
+    from .prompt.gpt_v2_few_shot_prompt import GptFewShotPrompter
+    from .prompt.gpt_v2_chain_of_thought_prompt import GptChainOfThoughtPrompter
     from .prompt.claude import ClaudePrompter
 
     return {
@@ -35,6 +37,8 @@ def get_prompters() -> dict[str, T.Callable[[T.Any], Prompter]]:
         "gpt-v2-ablated": \
             lambda cmd_args: GptV2AblatedPrompter(cmd_args,
                 with_coverage=False, with_get_info=False, with_imports=False, with_error_fixing=False),
+        "gpt-v2-few-shot": GptFewShotPrompter,
+        "gpt-v2-chain-of-thought": GptChainOfThoughtPrompter,
         "claude": ClaudePrompter
     }
 
