@@ -813,5 +813,13 @@ def main():
                     for module in required:
                         f.write(f"{module}\n")
 
+    # --- (6) show test suite mutation score (part of evaluation not pipeline)
+
+        print("Calculating mutation score...  ", end='', flush=True)
+        mutation_score = measure_suite_mutation_score(project_dir = Path("."), trace = (print if args.debug else None))
+        if mutation_score != None:
+            print(f"\nTest suite mutation score: {mutation_score:.3f} ({mutation_score * 100:.1f}%)")
+
     return 0
+
 
