@@ -91,8 +91,6 @@ def measure_suite_mutation_score(*, project_dir: Path, trace=None) -> float:
 
     #mutmut run --paths-to-mutate src/
 
-    """Runs an entire test suite and returns the coverage obtained."""
-
     try:
         run_command = ["mutmut", "run"]
         if trace: 
@@ -101,7 +99,7 @@ def measure_suite_mutation_score(*, project_dir: Path, trace=None) -> float:
         run_result = subprocess.run(run_command, cwd = project_dir, check = True, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, text = True)
 
         output = run_result.stdout
-    
+        
         matches = re.findall(r"🎉\s*(\d+).*🫥\s*(\d+)", output)
         if not matches:
             print("Could not obtain results from mutmut output.")
