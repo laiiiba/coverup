@@ -41,7 +41,7 @@ Respond ONLY with the Python code enclosed in backticks, without any explanation
         '''edit here'''
         return [mk_message(f"""\
 Executing the test yields an error, shown below.
-Modify or rewrite the test to correct it; respond only with the complete Python code in backticks. An example test case is given again below:
+Modify or rewrite the test to correct it; respond only with the complete Python code in backticks. An example test caseis given again below:
 Use the get_info tool function as necessary.
 
 {error}""")

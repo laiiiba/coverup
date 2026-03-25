@@ -18,12 +18,12 @@ class GptChainOfThoughtPrompter(Prompter):
 You are an expert Python test-driven developer.
 The code below, extracted from {filename}, does not achieve full coverage:
 when tested, {segment.lines_branches_missing_do()} not execute.
-Create new pytest test functions that execute all missing lines and branches, thinking STEP BY STEP, making sure you justify the reasonings to yourself, always making
-sure that each test is correct and indeed improves coverage. For example: 
+Create new pytest test functions that execute all missing lines and branches, thinking STEP BY STEP, making sure you justify the reasonings to yourself. Always make
+sure that each test is correct and indeed improves coverage.
 Use the get_info tool function as necessary.
 Always send entire Python test scripts when proposing a new test or correcting one you
 previously proposed.
-Be sure to include assertions in the test that verify any applicable postconditions. For example: 
+Be sure to include assertions in the test that verify any applicable postconditions.
 Please also make VERY SURE to clean up after the test, so as to avoid state pollution;
 use 'monkeypatch' or 'pytest-mock' if appropriate.
 Write as little top-level code as possible, and in particular do not include any top-level code
@@ -39,7 +39,7 @@ Respond ONLY with the Python code enclosed in backticks, without any explanation
     def error_prompt(self, segment: CodeSegment, error: str) -> T.List[dict] | None:
         return [mk_message(f"""\
 Executing the test yields an error, shown below.
-Modify or rewrite the test to correct it; think STEP BY STEP. Respond only with the complete Python code in backticks. An example test case is given again below:
+Modify or rewrite the test to correct it; thinking STEP BY STEP. Respond only with the complete Python code in backticks.
 Use the get_info tool function as necessary.
 
 {error}""")
@@ -50,7 +50,7 @@ Use the get_info tool function as necessary.
                                 missing_lines: set, missing_branches: set) -> T.List[dict] | None:
         return [mk_message(f"""\
 The tests still lack coverage: {lines_branches_do(missing_lines, set(), missing_branches)} not execute.
-Modify it to correct that; think STEP BY STEP. Respond only with the complete Python code in backticks. 
+Modify it to correct that; thinking STEP BY STEP. Respond only with the complete Python code in backticks.
 Use the get_info tool function as necessary.
 """)
         ]
@@ -82,3 +82,4 @@ Use the get_info tool function as necessary.
 
     def get_functions(self) -> T.List[T.Callable]:
         return [self.get_info]
+
