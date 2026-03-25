@@ -37,7 +37,6 @@ Respond ONLY with the Python code enclosed in backticks, without any explanation
 
 
     def error_prompt(self, segment: CodeSegment, error: str) -> T.List[dict] | None:
-        '''edit here'''
         return [mk_message(f"""\
 Executing the test yields an error, shown below.
 Modify or rewrite the test to correct it; think STEP BY STEP. Respond only with the complete Python code in backticks. An example test case is given again below:
