@@ -87,10 +87,6 @@ def measure_suite_coverage(*, tests_dir: Path, source_dir: T.Optional[Path], pyt
 def measure_suite_mutation_score(*, project_dir: Path, trace=None) -> float:
     """Runs mutation tests and returns the mutation score."""
 
-    #provide: source code, test directory
-
-    #mutmut run --paths-to-mutate src/
-
     try:
         run_command = ["mutmut", "run"]
         if trace: 
