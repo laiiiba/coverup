@@ -39,7 +39,7 @@ Respond ONLY with the Python code enclosed in backticks, without any explanation
     def error_prompt(self, segment: CodeSegment, error: str) -> T.List[dict] | None:
         return [mk_message(f"""\
 Executing the test yields an error, shown below.
-Modify or rewrite the test to correct it; thinking STEP BY STEP. Respond only with the complete Python code in backticks.
+Modify or rewrite the test to correct it; respond only with the complete Python code in backticks.
 Use the get_info tool function as necessary.
 
 {error}""")
@@ -50,7 +50,7 @@ Use the get_info tool function as necessary.
                                 missing_lines: set, missing_branches: set) -> T.List[dict] | None:
         return [mk_message(f"""\
 The tests still lack coverage: {lines_branches_do(missing_lines, set(), missing_branches)} not execute.
-Modify it to correct that; thinking STEP BY STEP. Respond only with the complete Python code in backticks.
+Modify it to correct that; respond only with the complete Python code in backticks.
 Use the get_info tool function as necessary.
 """)
         ]

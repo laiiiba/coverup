@@ -11,7 +11,6 @@ class GptFewShotPrompter(Prompter):
 
 
     def initial_prompt(self, segment: CodeSegment) -> T.List[dict]:
-        '''edit here'''
         filename = segment.path.relative_to(self.args.src_base_dir)
 
         return [
@@ -20,15 +19,27 @@ You are an expert Python test-driven developer.
 The code below, extracted from {filename}, does not achieve full coverage:
 when tested, {segment.lines_branches_missing_do()} not execute.
 Create new pytest test functions that execute all missing lines and branches, always making
-sure that each test is correct and indeed improves coverage. For example: 
+sure that each test is correct and indeed improves coverage. 
 Use the get_info tool function as necessary.
 Always send entire Python test scripts when proposing a new test or correcting one you
 previously proposed.
-Be sure to include assertions in the test that verify any applicable postconditions. For example: 
+Be sure to include assertions in the test that verify any applicable postconditions. 
 Please also make VERY SURE to clean up after the test, so as to avoid state pollution;
 use 'monkeypatch' or 'pytest-mock' if appropriate.
 Write as little top-level code as possible, and in particular do not include any top-level code
 calling into pytest.main or the test itself.
+
+Here is an example of the expected style:
+```python 
+import pytest
+from mymod.calculator import is_even
+
+def test_is_even_with_even_number():
+    assert is_even(2) is True
+
+def test_is_even_with_odd_number():
+    assert is_even(3) is False
+
 Respond ONLY with the Python code enclosed in backticks, without any explanation.
 ```python
 {segment.get_excerpt()}
@@ -38,10 +49,9 @@ Respond ONLY with the Python code enclosed in backticks, without any explanation
 
 
     def error_prompt(self, segment: CodeSegment, error: str) -> T.List[dict] | None:
-        '''edit here'''
         return [mk_message(f"""\
 Executing the test yields an error, shown below.
-Modify or rewrite the test to correct it; respond only with the complete Python code in backticks. An example test caseis given again below:
+Modify or rewrite the test to correct it; respond only with the complete Python code in backticks.
 Use the get_info tool function as necessary.
 
 {error}""")
