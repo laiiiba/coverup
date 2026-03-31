@@ -58,7 +58,7 @@ def main():
                     check_whole_suite(args)
 
                 try:
-                    print("MODIFIED Measuring coverage...  ", end='', flush=True) 
+                    print("Measuring coverage...  ", end='', flush=True) 
                     '''test if the local executable is running correctly with changes'''
                     coverage = measure_suite_coverage(tests_dir=args.tests_dir, source_dir=args.package_dir,
                                                       pytest_args=args.pytest_args,
@@ -146,7 +146,7 @@ def main():
 
         if args.prompt_for_tests:
             try:
-                print("MODIFIED Measuring coverage...  ", end='', flush=True)
+                print("Measuring coverage...  ", end='', flush=True)
                 coverage = measure_suite_coverage(tests_dir=args.tests_dir, source_dir=args.package_dir,
                                                   pytest_args=args.pytest_args,
                                                   isolate_tests=args.isolate_tests,
@@ -243,7 +243,7 @@ def main():
                     check_whole_suite(args)
 
                 try:
-                    print("MODIFIED Measuring coverage...  ", end='', flush=True) 
+                    print("Measuring coverage...  ", end='', flush=True) 
                     '''test if the local executable is running correctly with changes'''
                     coverage = measure_suite_coverage(tests_dir=args.tests_dir, source_dir=args.package_dir,
                                                       pytest_args=args.pytest_args,
@@ -331,7 +331,7 @@ def main():
 
         if args.prompt_for_tests:
             try:
-                print("MODIFIED Measuring coverage...  ", end='', flush=True)
+                print("Measuring coverage...  ", end='', flush=True)
                 coverage = measure_suite_coverage(tests_dir=args.tests_dir, source_dir=args.package_dir,
                                                   pytest_args=args.pytest_args,
                                                   isolate_tests=args.isolate_tests,
