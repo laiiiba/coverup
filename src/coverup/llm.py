@@ -212,8 +212,6 @@ class Chatter:
     async def _send_request(self, request: dict, ctx: object) -> litellm.ModelResponse | None:
         """Sends the LLM chat request, handling common failures and returning the response."""
 
-        '''edit so that the codecarbon doesn't measure the ecologits '''
-
         llm_call_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'llm_call', output_dir = 'llm_call_codecarbon_logs', log_level = 'error')
         llm_call_codecarbon.start()
 
@@ -257,12 +255,12 @@ class Chatter:
                                 writer.writerow(["energy min", "energy max", "energy midpoint", "energy unit", "emissions min", "emissions max", "emissions midpoint", "emissions unit"])
                             writer.writerow([min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
                     
-                        print(f"\nTotal (estimated) server side CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
+                        #print(f"\nTotal (estimated) server side CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
                 
                     except Exception as e:
                         print(f"Failed to log energy: {e}")
                     
-                    ecologits_emissions = ecologits_codecarbon.stop()
+                    ecologits_codecarbon.stop()
                 
                     return response           
 
@@ -305,8 +303,9 @@ class Chatter:
                     self._log_msg(ctx, f"Error: {type(e)} {e}")
                     return None # gives up this segment
         finally:
-            llm_call_emissions = llm_call_codecarbon.stop()
-            print(f"\nTotal client side CO2 emissions for llm call: {llm_call_emissions-ecologits_emissions} kgCO2eq", flush=True)
+            llm_call_codecarbon.stop()
+            #llm_call_emissions = llm_call_codecarbon.stop()
+            #print(f"\nTotal client side CO2 emissions for llm call: {llm_call_emissions-ecologits_emissions} kgCO2eq", flush=True)
 
     def _call_function(self, ctx: object, tool_call: litellm.ModelResponse) -> str:
         args = json.loads(tool_call.function.arguments)
