@@ -1,5 +1,6 @@
 import typing as T
 from pathlib import Path
+import shutil
 from .utils import *
 import ast
 from .codeinfo import get_global_imports, parse_file
@@ -72,7 +73,13 @@ def get_missing_coverage(coverage, line_limit: int = 100) -> T.List[CodeSegment]
     such as functions or classes, which have less than 100% coverage.
     """
     
-    segmentation_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'segmentation', output_dir = 'segmentation_codecarbon_logs', log_level = 'error')
+    segmentation_codecarbon_output_dir = Path("segmentation_codecarbon_logs")
+    if segmentation_codecarbon_output_dir.exists():
+        shutil.rmtree(segmentation_codecarbon_output_dir)
+    
+    segmentation_codecarbon_output_dir.mkdir(parents = True, exist_ok = True)
+
+    segmentation_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'segmentation', output_dir = segmentation_codecarbon_output_dir, log_level = 'error')
     segmentation_codecarbon.start()
 
     try: 

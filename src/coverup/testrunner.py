@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 import tempfile
 import subprocess
 import pytest
@@ -45,7 +46,13 @@ def measure_suite_coverage(*, tests_dir: Path, source_dir: T.Optional[Path], pyt
                            trace=None, isolate_tests=False, branch_coverage=True):
     """Runs an entire test suite and returns the coverage obtained."""
 
-    suite_coverage_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'suite_coverage', output_dir = 'suite_coverage_codecarbon_logs', log_level = 'error')
+    suite_coverage_codecarbon_output_dir = Path("suite_coverage_codecarbon_logs")
+    if suite_coverage_codecarbon_output_dir.exists():
+        shutil.rmtree(suite_coverage_codecarbon_output_dir)
+    
+    suite_coverage_codecarbon_output_dir.mkdir(parents = True, exist_ok = True)
+
+    suite_coverage_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'suite_coverage', output_dir = suite_coverage_codecarbon_output_dir, log_level = 'error')
     suite_coverage_codecarbon.start()
     
     try:

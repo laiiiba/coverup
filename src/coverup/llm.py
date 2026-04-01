@@ -11,6 +11,8 @@ from ecologits import EcoLogits
 import csv
 import os 
 from codecarbon import EmissionsTracker
+from pathlib import Path
+import shutil
 
 with warnings.catch_warnings():
     # ignore pydantic warnings https://github.com/BerriAI/litellm/issues/2832
@@ -212,9 +214,13 @@ class Chatter:
     async def _send_request(self, request: dict, ctx: object) -> litellm.ModelResponse | None:
         """Sends the LLM chat request, handling common failures and returning the response."""
 
-        '''edit so that the codecarbon doesn't measure the ecologits '''
+        llm_call_codecarbon_output_dir = Path("llm_call_codecarbon_logs")
+        if llm_call_codecarbon_output_dir.exists():
+            shutil.rmtree(llm_call_codecarbon_output_dir)
+    
+        llm_call_codecarbon_output_dir.mkdir(parents = True, exist_ok = True)
 
-        llm_call_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'llm_call', output_dir = 'llm_call_codecarbon_logs', log_level = 'error')
+        llm_call_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = "llm_calls", output_dir = llm_call_codecarbon_output_dir, log_level = 'error')
         llm_call_codecarbon.start()
 
         try:
@@ -232,7 +238,13 @@ class Chatter:
 
                     response = await litellm.acreate(**request)
 
-                    ecologits_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'ecologits', output_dir = 'ecologits_codecarbon_logs', log_level = 'error')
+                    ecologits_codecarbon_output_dir = Path("ecologits_codecarbon_logs")
+                    if ecologits_codecarbon_output_dir.exists():
+                        shutil.rmtree(ecologits_codecarbon_output_dir)
+                    
+                    ecologits_codecarbon_output_dir.mkdir(parents = True, exist_ok = True)
+
+                    ecologits_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'ecologits', output_dir = ecologits_codecarbon_output_dir, log_level = 'error')
                     ecologits_codecarbon.start()
 
                     try: 
@@ -247,7 +259,7 @@ class Chatter:
                         max_emissions = gwp.value.max
                         mid_emissions = (min_emissions + max_emissions)/2
                         emissions_unit = gwp.unit
-
+                        
                         file_path = "ecologits_impacts.csv"
                         file_exists = os.path.isfile(file_path)
 
@@ -257,7 +269,7 @@ class Chatter:
                                 writer.writerow(["energy min", "energy max", "energy midpoint", "energy unit", "emissions min", "emissions max", "emissions midpoint", "emissions unit"])
                             writer.writerow([min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
                     
-                        print(f"\nTotal (estimated) server side CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
+                        #print(f"\nTotal (estimated) server side CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
                 
                     except Exception as e:
                         print(f"Failed to log energy: {e}")
@@ -305,8 +317,9 @@ class Chatter:
                     self._log_msg(ctx, f"Error: {type(e)} {e}")
                     return None # gives up this segment
         finally:
-            llm_call_emissions = llm_call_codecarbon.stop()
-            print(f"\nTotal client side CO2 emissions for llm call: {llm_call_emissions-ecologits_emissions} kgCO2eq", flush=True)
+            llm_call_codecarbon.stop()
+            #llm_call_emissions = llm_call_codecarbon.stop()
+            #print(f"\nTotal client side CO2 emissions for llm call: {llm_call_emissions-ecologits_emissions} kgCO2eq", flush=True)
 
     def _call_function(self, ctx: object, tool_call: litellm.ModelResponse) -> str:
         args = json.loads(tool_call.function.arguments)
