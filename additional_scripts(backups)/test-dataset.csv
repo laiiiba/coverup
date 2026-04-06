@@ -1,0 +1,3 @@
+test-apps/flutils2,flutils.setuputils.cfg
+test-apps/flutils,flutils.txtutils
+test-apps/httpie,httpie.output.formatters.colors

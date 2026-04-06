@@ -6,8 +6,8 @@ import random
 project_root = Path("..")
 cm_csv_path = project_root / "dataset" / "test-apps" / "cm_modules.csv"
 
-complexity_output_path = project_root / "cm-dataset-analysis" / "cm_modules_complexity_results.csv"
-selection_output_path = project_root / "cm-dataset-analysis" / "selected_cm_modules.csv"
+complexity_output_path = project_root / "cm-dataset-setup" / "cm_modules_complexity_results.csv"
+selection_output_path = project_root / "cm-dataset-setup" / "selected_cm_modules.csv"
 
 def compute_complexities():
     '''use radon to compute cyclomatic complexity and classify into easy, medium, hard'''
@@ -62,9 +62,9 @@ def select_modules():
                 hard.append(row)
 
         selections = (
-            random.sample(easy, 15) +
-            random.sample(medium, 15) +
-            random.sample(hard, 15)
+            random.sample(easy, 10) +
+            random.sample(medium, 10) +
+            random.sample(hard, 10)
         )
     
         with selection_output_path.open("w", newline = "", encoding = "utf-8") as out:
