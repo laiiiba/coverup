@@ -212,7 +212,7 @@ class Chatter:
     async def _send_request(self, request: dict, ctx: object) -> litellm.ModelResponse | None:
         """Sends the LLM chat request, handling common failures and returning the response."""
 
-        llm_call_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'llm_call', output_dir = 'llm_call_codecarbon_logs', log_level = 'error')
+        llm_call_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'llm_call', log_level = 'error')
         llm_call_codecarbon.start()
 
         try:
@@ -230,7 +230,7 @@ class Chatter:
 
                     response = await litellm.acreate(**request)
 
-                    ecologits_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'ecologits', output_dir = 'ecologits_codecarbon_logs', log_level = 'error')
+                    ecologits_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'ecologits', log_level = 'error')
                     ecologits_codecarbon.start()
 
                     try: 

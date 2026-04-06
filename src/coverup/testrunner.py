@@ -45,7 +45,7 @@ def measure_suite_coverage(*, tests_dir: Path, source_dir: T.Optional[Path], pyt
                            trace=None, isolate_tests=False, branch_coverage=True):
     """Runs an entire test suite and returns the coverage obtained."""
 
-    suite_coverage_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'suite_coverage', output_dir = 'suite_coverage_codecarbon_logs', log_level = 'error')
+    suite_coverage_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'suite_coverage', log_level = 'error')
     suite_coverage_codecarbon.start()
     
     try:

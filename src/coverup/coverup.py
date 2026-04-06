@@ -275,7 +275,7 @@ def log_write(args: argparse.Namespace, seg: CodeSegment, m: str) -> None:
 def check_whole_suite(args: argparse.Namespace) -> None:
     """Check whole suite and disable any polluting/failing tests."""
     
-    integration_check_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'integration_check', output_dir = 'integration_check_codecarbon_logs', log_level = 'error')
+    integration_check_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'integration_check', log_level = 'error')
     integration_check_codecarbon.start()
 
     try:
@@ -649,7 +649,7 @@ def add_to_pythonpath(dir: Path):
     sys.path.insert(0, str(dir))
 
 def main():
-    overall_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'overall', output_dir = 'overall_codecarbon_logs', log_level = 'error')
+    overall_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'overall', log_level = 'error')
     overall_codecarbon.start()
 
     try:

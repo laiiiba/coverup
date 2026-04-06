@@ -72,7 +72,7 @@ def get_missing_coverage(coverage, line_limit: int = 100) -> T.List[CodeSegment]
     such as functions or classes, which have less than 100% coverage.
     """
     
-    segmentation_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'segmentation', output_dir = 'segmentation_codecarbon_logs', log_level = 'error')
+    segmentation_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'segmentation', log_level = 'error')
     segmentation_codecarbon.start()
 
     try: 
