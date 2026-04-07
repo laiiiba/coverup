@@ -1,5 +1,6 @@
 import shutil
 from pathlib import Path
+import helper_funcs
 
 input_modules = [
     "test-apps/flutils,flutils.codecs.b64",
@@ -45,10 +46,7 @@ output_root.mkdir(parents=True, exist_ok=True)
 
 for module in input_modules:
     package_path, module = module.strip().split(",")
-    package_name = Path(package_path).parts[1]
-    module_suffix = module.split(".")[-1]
-
-    final_name = f"{package_name}-{module_suffix}"
+    final_name = helper_funcs.make_project_name(package_path, module)
 
     source = dataset_root / package_path
     dest = output_root / final_name

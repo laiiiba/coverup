@@ -2,6 +2,7 @@ from pathlib import Path
 import csv
 from radon.complexity import cc_rank, cc_visit
 import random
+import helper_funcs
 
 project_root = Path("..")
 cm_csv_path = project_root / "dataset" / "test-apps" / "cm_modules.csv"
@@ -14,12 +15,13 @@ def compute_complexities():
 
     with complexity_output_path.open("w", newline = "", encoding = "utf-8") as out:
         writer = csv.writer(out)
-        writer.writerow(["project_path", "module", "max_complexity_number", "radon_rank", "complexity_level"])
+        writer.writerow(["project_name", "project_path", "module", "max_complexity_number", "radon_rank", "complexity_level"])
     
         with cm_csv_path.open(newline = "", encoding = "utf-8") as f:
             reader = csv.reader(f)
 
             for project_path, module_name in reader:
+                project_name = helper_funcs.make_project_name(project_path, module_name)
                 module_file = module_name.replace(".", "/") + ".py"
                 file_path = project_root / "dataset" / project_path / module_file
 
@@ -39,7 +41,7 @@ def compute_complexities():
                 else:
                     complexity_level = "hard"
 
-                writer.writerow([project_path, module_name, max_complexity, rank, complexity_level])
+                writer.writerow([project_name, project_path, module_name, max_complexity, rank, complexity_level])
 
 def select_modules():
     '''select a subset of easy, medium, hard modules'''

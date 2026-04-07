@@ -32,6 +32,7 @@ COMMANDS = [
 for cmd in COMMANDS:
     print(f"\nRunning: {' '.join(cmd)}", flush=True)
 
+    #MODIFY FOR REAL SCRIPT. We probably want parts[0]
     package_index = cmd.index("--package-dir") + 1
     package_path = cmd[package_index]
     project_name = Path(package_path).parts[1]
