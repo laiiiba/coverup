@@ -17,6 +17,7 @@ from .testrunner import *
 from .version import __version__
 from .utils import summary_coverage
 
+import os
 
 def get_prompters() -> dict[str, T.Callable[[T.Any], Prompter]]:
     # in the future, we may dynamically load based on file names.
@@ -275,7 +276,8 @@ def log_write(args: argparse.Namespace, seg: CodeSegment, m: str) -> None:
 def check_whole_suite(args: argparse.Namespace) -> None:
     """Check whole suite and disable any polluting/failing tests."""
     
-    integration_check_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'integration_check', log_level = 'error')
+    project_name = os.environ.get("PROJECT_NAME", "unknown")
+    integration_check_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'integration_check', log_level = 'error')
     integration_check_codecarbon.start()
 
     try:
@@ -649,7 +651,9 @@ def add_to_pythonpath(dir: Path):
     sys.path.insert(0, str(dir))
 
 def main():
-    overall_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'overall', log_level = 'error')
+    import os
+    project_name = os.environ.get("PROJECT_NAME", "unknown")
+    overall_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'overall', log_level = 'error')
     overall_codecarbon.start()
 
     try:

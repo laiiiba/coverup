@@ -212,7 +212,8 @@ class Chatter:
     async def _send_request(self, request: dict, ctx: object) -> litellm.ModelResponse | None:
         """Sends the LLM chat request, handling common failures and returning the response."""
 
-        llm_call_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'llm_call', log_level = 'error')
+        project_name = os.environ.get("PROJECT_NAME", "unknown")
+        llm_call_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'llm_call', log_level = 'error')
         llm_call_codecarbon.start()
 
         try:
@@ -230,7 +231,7 @@ class Chatter:
 
                     response = await litellm.acreate(**request)
 
-                    ecologits_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'ecologits', log_level = 'error')
+                    ecologits_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'ecologits', log_level = 'error')
                     ecologits_codecarbon.start()
 
                     try: 
@@ -252,8 +253,8 @@ class Chatter:
                         with open(file_path, mode="a", newline="") as f:
                             writer = csv.writer(f)
                             if not file_exists:
-                                writer.writerow(["energy min", "energy max", "energy midpoint", "energy unit", "emissions min", "emissions max", "emissions midpoint", "emissions unit"])
-                            writer.writerow([min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
+                                writer.writerow(["project name","energy min", "energy max", "energy midpoint", "energy unit", "emissions min", "emissions max", "emissions midpoint", "emissions unit"])
+                            writer.writerow([project_name, min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
                     
                         #print(f"\nTotal (estimated) server side CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
                 

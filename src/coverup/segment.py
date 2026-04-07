@@ -4,6 +4,7 @@ from .utils import *
 import ast
 from .codeinfo import get_global_imports, parse_file
 from codecarbon import EmissionsTracker
+import os
 
 class CodeSegment:
     """Represents a section of code that is missing coverage."""
@@ -71,8 +72,9 @@ def get_missing_coverage(coverage, line_limit: int = 100) -> T.List[CodeSegment]
     """Processes a JSON SlipCover output and generates a list of Python code segments,
     such as functions or classes, which have less than 100% coverage.
     """
-    
-    segmentation_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'segmentation', log_level = 'error')
+        
+    project_name = os.environ.get("PROJECT_NAME", "unknown")
+    segmentation_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'segmentation', log_level = 'error')
     segmentation_codecarbon.start()
 
     try: 

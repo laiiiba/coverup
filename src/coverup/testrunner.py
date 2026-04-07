@@ -44,8 +44,9 @@ async def measure_test_coverage(*, test: str, tests_dir: Path, pytest_args='',
 def measure_suite_coverage(*, tests_dir: Path, source_dir: T.Optional[Path], pytest_args='',
                            trace=None, isolate_tests=False, branch_coverage=True):
     """Runs an entire test suite and returns the coverage obtained."""
-
-    suite_coverage_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'suite_coverage', log_level = 'error')
+    
+    project_name = os.environ.get("PROJECT_NAME", "unknown")
+    suite_coverage_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'suite_coverage', log_level = 'error')
     suite_coverage_codecarbon.start()
     
     try:
