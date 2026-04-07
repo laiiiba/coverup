@@ -48,7 +48,12 @@ for module in input_modules:
     package_path, module = module.strip().split(",")
     final_name = helper_funcs.make_project_name(package_path, module)
 
-    source = dataset_root / package_path
+    #handle special case
+    if package_path == "test-apps/ansible/lib":
+        source = dataset_root / "test-apps" / "ansible"
+    else:
+        source = dataset_root / package_path
+
     dest = output_root / final_name
 
     if not source.exists():
