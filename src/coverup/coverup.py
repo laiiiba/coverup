@@ -17,6 +17,8 @@ from .testrunner import *
 from .version import __version__
 from .utils import summary_coverage
 
+import csv
+
 import os
 
 def get_prompters() -> dict[str, T.Callable[[T.Any], Prompter]]:
@@ -650,9 +652,30 @@ def add_to_pythonpath(dir: Path):
     os.environ['PYTHONPATH'] = str(dir) + (f":{os.environ['PYTHONPATH']}" if 'PYTHONPATH' in os.environ else "")
     sys.path.insert(0, str(dir))
 
+def append_to_csv(csv_path, row):
+    csv_path = Path(csv_path)
+
+    csv_path.parent.mkdir(parents = True, exist_ok = True)
+
+    file_exists = csv_path.exists()
+
+    with csv_path.open("a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["experiment_id", "project_name", "status", "final_coverage"])
+    
+        if not file_exists:
+            writer.writeheader()
+    
+        writer.writerow(row)
+
 def main():
     import os
+    results_csv = Path(os.environ.get("RESULTS_CSV", "results/experiment_results.csv"))
     project_name = os.environ.get("PROJECT_NAME", "unknown")
+
+    experiment_id = os.environ.get("EXPERIMENT_ID", "unknown")
+    status = "fail"
+    final_coverage = ""
+
     overall_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'overall', log_level = 'error')
     overall_codecarbon.start()
 
@@ -725,7 +748,8 @@ def main():
                     print("Error measuring coverage:\n" + str(e.stdout, 'UTF-8', errors='ignore'))
                     return 1
 
-            print(summary_coverage(coverage, args.source_files))
+            final_coverage = summary_coverage(coverage, args.source_files)
+            print(final_coverage)
             # TODO also show running coverage estimate
 
             chatter.set_add_cost(state.add_cost)
@@ -811,7 +835,9 @@ def main():
                 print("Error measuring coverage:\n" + str(e.stdout, 'UTF-8', errors='ignore'))
                 return 1
 
-            print(summary_coverage(coverage, args.source_files))
+            final_coverage = summary_coverage(coverage, args.source_files)
+            print(final_coverage)
+            status = "success"
 
         # --- (5) save state and show missing modules, if appropriate
 
@@ -825,10 +851,12 @@ def main():
                     with args.write_requirements_to.open("a") as f:
                         for module in required:
                             f.write(f"{module}\n")
-    
+            
     finally: 
         overall_emissions = overall_codecarbon.stop()
         print(f"\nTotal CO2 emissions for overall process: {overall_emissions} kg", flush=True)
+
+        append_to_csv(results_csv, {"experiment_id": experiment_id, "project_name": project_name, "status" : status, "final_coverage" : final_coverage})
 
     # --- (6) show test suite mutation score (part of evaluation not pipeline)
 

@@ -32,13 +32,15 @@ COMMANDS = [
 for cmd in COMMANDS:
     print(f"\nRunning: {' '.join(cmd)}", flush=True)
 
-    #MODIFY FOR REAL SCRIPT. We probably want parts[0]
+    #MODIFY FOR REAL SCRIPT. We probably want parts[0]. 
     package_index = cmd.index("--package-dir") + 1
     package_path = cmd[package_index]
     project_name = Path(package_path).parts[1]
 
     env = os.environ.copy()
     env["PROJECT_NAME"] = project_name
+    env["EXPERIMENT_ID"] = "test-exp-v2" #change for each script
+    env["RESULTS_CSV"] = "results/experiment_results.csv" 
 
     try:
         subprocess.run(cmd, env=env, timeout=600) #10 minute limit 
