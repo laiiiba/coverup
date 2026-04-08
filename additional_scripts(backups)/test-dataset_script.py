@@ -43,9 +43,13 @@ for cmd in COMMANDS:
     env["RESULTS_CSV"] = "results/experiment_results.csv" 
 
     try:
-        subprocess.run(cmd, env=env, timeout=600) #10 minute limit 
-    except:
-        print(f"{project_name} timed out (exceeded 10 minutes).")
+        subprocess.run(cmd, env=env, timeout=900, check = True) #15 minute limit 
+    except subprocess.TimeoutExpired:
+        print(f"{project_name} timed out (exceeded 15 minutes).")
+    except subprocess.CalledProcessError as e:
+        print(f"{project_name} failed with the return code {e.returncode}.")
+    except Exception as e:
+        print(f"{project_name} failed with an unexpected error : {e}")
 
 
 

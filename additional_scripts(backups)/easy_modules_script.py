@@ -5,9 +5,9 @@ from pathlib import Path
 COMMANDS = [ #SPECIFY VERSION
     [ #will work (stable package)
         "coverup",
-        "flutils-b64/flutils/codecs/b64.py",
-        "--package-dir", "flutils-b64/flutils",
-        "--tests-dir", "flutils-b64/coverup-tests",
+        "dataset/flutils-b64/flutils/codecs/b64.py",
+        "--package-dir", "dataset/flutils-b64/flutils",
+        "--tests-dir", "dataset/flutils-b64/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -15,9 +15,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],
     [ #works
         "coverup",
-        "cookiecutter-replay/cookiecutter/replay.py",
-        "--package-dir", "cookiecutter-replay/cookiecutter",
-        "--tests-dir", "cookiecutter-replay/coverup-tests",
+        "dataset/cookiecutter-replay/cookiecutter/replay.py",
+        "--package-dir", "dataset/cookiecutter-replay/cookiecutter",
+        "--tests-dir", "dataset/cookiecutter-replay/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -25,9 +25,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],
     [ #works
         "coverup",
-        "youtube-dl-metadatafromtitle/youtube_dl/postprocessor/metadatafromtitle.py",
-        "--package-dir", "youtube-dl-metadatafromtitle/youtube_dl",
-        "--tests-dir", "youtube-dl-metadatafromtitle/coverup-tests",
+        "dataset/youtube-dl-metadatafromtitle/youtube_dl/postprocessor/metadatafromtitle.py",
+        "--package-dir", "dataset/youtube-dl-metadatafromtitle/youtube_dl",
+        "--tests-dir", "dataset/youtube-dl-metadatafromtitle/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -35,9 +35,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],
     [ #works
         "coverup",
-        "typesystem-formats/typesystem/formats.py",
-        "--package-dir", "typesystem-formats/typesystem",
-        "--tests-dir", "typesystem-formats/coverup-tests",
+        "dataset/typesystem-formats/typesystem/formats.py",
+        "--package-dir", "dataset/typesystem-formats/typesystem",
+        "--tests-dir", "dataset/typesystem-formats/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -45,9 +45,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],    
     [ #will work (tested module before)
         "coverup",
-        "flutils-cfg/flutils/setuputils/cfg.py",
-        "--package-dir", "flutils-cfg/flutils",
-        "--tests-dir", "flutils-cfg/coverup-tests",
+        "dataset/flutils-cfg/flutils/setuputils/cfg.py",
+        "--package-dir", "dataset/flutils-cfg/flutils",
+        "--tests-dir", "dataset/flutils-cfg/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -55,9 +55,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],    
     [ #works
         "coverup",
-        "ansible-facter/lib/ansible/module_utils/facts/other/facter.py",
-        "--package-dir", "ansible-facter/lib/ansible",
-        "--tests-dir", "ansible-facter/coverup-tests",
+        "dataset/ansible-facter/lib/ansible/module_utils/facts/other/facter.py",
+        "--package-dir", "dataset/ansible-facter/lib/ansible",
+        "--tests-dir", "dataset/ansible-facter/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -65,9 +65,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],    
     [ #works
         "coverup",
-        "ansible-urls/lib/ansible/plugins/filter/urls.py",
-        "--package-dir", "ansible-urls/lib/ansible",
-        "--tests-dir", "ansible-urls/coverup-tests",
+        "dataset/ansible-urls/lib/ansible/plugins/filter/urls.py",
+        "--package-dir", "dataset/ansible-urls/lib/ansible",
+        "--tests-dir", "dataset/ansible-urls/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -75,9 +75,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],    
     [ #works
         "coverup",
-        "PySnooper-utils/pysnooper/utils.py",
-        "--package-dir", "PySnooper-utils/pysnooper",
-        "--tests-dir", "PySnooper-utils/coverup-tests",
+        "dataset/PySnooper-utils/pysnooper/utils.py",
+        "--package-dir", "dataset/PySnooper-utils/pysnooper",
+        "--tests-dir", "dataset/PySnooper-utils/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -85,9 +85,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],    
     [ #works
         "coverup",
-        "ansible-color/lib/ansible/utils/color.py",
-        "--package-dir", "ansible-color/lib/ansible",
-        "--tests-dir", "ansible-color/coverup-tests",
+        "dataset/ansible-color/lib/ansible/utils/color.py",
+        "--package-dir", "dataset/ansible-color/lib/ansible",
+        "--tests-dir", "dataset/ansible-color/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -95,9 +95,9 @@ COMMANDS = [ #SPECIFY VERSION
     ],    
     [ #issue-tried twice
         "coverup",
-        "ansible-auto/lib/ansible/plugins/inventory/auto.py",
-        "--package-dir", "ansible-auto/lib/ansible",
-        "--tests-dir", "ansible-auto/coverup-tests",
+        "dataset/ansible-auto/lib/ansible/plugins/inventory/auto.py",
+        "--package-dir", "dataset/ansible-auto/lib/ansible",
+        "--tests-dir", "dataset/ansible-auto/coverup-tests",
         "--model", "gpt-4o",
         "--prompt", "gpt-v2",
         "--disable-failing",
@@ -110,7 +110,7 @@ for cmd in COMMANDS:
 
     package_index = cmd.index("--package-dir") + 1
     package_path = cmd[package_index]
-    project_name = Path(package_path).parts[0]
+    project_name = Path(package_path).parts[1]
 
     env = os.environ.copy()
     env["PROJECT_NAME"] = project_name
@@ -118,9 +118,13 @@ for cmd in COMMANDS:
     env["RESULTS_CSV"] = "results/experiment_results.csv" 
 
     try:
-        subprocess.run(cmd, env=env, timeout=900) #15 minute limit 
-    except:
+        subprocess.run(cmd, env=env, timeout=900, check=True) #15 minute limit 
+    except subprocess.TimeoutExpired:
         print(f"{project_name} timed out (exceeded 15 minutes).")
+    except subprocess.CalledProcessError as e:
+        print(f"{project_name} failed with the return code {e.returncode}.")
+    except Exception as e:
+        print(f"{project_name} failed with an unexpected error : {e}")
 
 
 '''test-apps/flutils,flutils.codecs.b64
