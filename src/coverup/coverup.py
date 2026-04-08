@@ -673,7 +673,7 @@ def main():
     project_name = os.environ.get("PROJECT_NAME", "unknown")
 
     experiment_id = os.environ.get("EXPERIMENT_ID", "unknown")
-    status = "fail"
+    status = "fail" #ends in fail if coverup does not complete its run
     final_coverage = ""
 
     overall_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'overall', log_level = 'error')
