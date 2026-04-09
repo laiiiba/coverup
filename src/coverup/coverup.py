@@ -21,6 +21,8 @@ import csv
 
 import os
 
+import time
+
 def get_prompters() -> dict[str, T.Callable[[T.Any], Prompter]]:
     # in the future, we may dynamically load based on file names.
 
@@ -660,7 +662,7 @@ def append_to_csv(csv_path, row):
     file_exists = csv_path.exists()
 
     with csv_path.open("a", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["experiment_id", "project_name", "status", "final_coverage"])
+        writer = csv.DictWriter(f, fieldnames=["experiment_id", "project_name", "status", "final_coverage", 'seconds_taken'])
     
         if not file_exists:
             writer.writeheader()
@@ -678,6 +680,8 @@ def main():
 
     overall_codecarbon = EmissionsTracker(project_name = project_name, experiment_id = 'overall', log_level = 'error')
     overall_codecarbon.start()
+
+    start_time = time.time()
 
     try:
         from collections import defaultdict
@@ -851,19 +855,15 @@ def main():
                     with args.write_requirements_to.open("a") as f:
                         for module in required:
                             f.write(f"{module}\n")
-            
+        
     finally: 
+        end_time = time.time()
+        time_taken = (end_time - start_time, 2)
+
         overall_emissions = overall_codecarbon.stop()
         print(f"\nTotal CO2 emissions for overall process: {overall_emissions} kg", flush=True)
 
-        append_to_csv(results_csv, {"experiment_id": experiment_id, "project_name": project_name, "status" : status, "final_coverage" : final_coverage})
-
-    # --- (6) show test suite mutation score (part of evaluation not pipeline)
-
-    '''print("Calculating mutation score...  ", end='', flush=True)
-    mutation_score = measure_suite_mutation_score(project_dir = Path("."), trace = (print if args.debug else None))
-    if mutation_score != None:
-        print(f"\nTest suite mutation score: {mutation_score:.3f} ({mutation_score * 100:.1f}%)")'''
+        append_to_csv(results_csv, {"experiment_id": experiment_id, "project_name": project_name, "status" : status, "final_coverage" : final_coverage, "seconds_taken" : time_taken})
 
     return 0
 
