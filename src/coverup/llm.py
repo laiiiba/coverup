@@ -255,7 +255,7 @@ class Chatter:
                         with open(file_path, mode="a", newline="") as f:
                             writer = csv.writer(f)
                             if not file_exists:
-                                writer.writerow(["time","project name","energy min", "energy max", "energy midpoint", "energy unit", "emissions min", "emissions max", "emissions midpoint", "emissions unit"])
+                                writer.writerow(["time","project_name","energy_min", "energy_max", "energy_midpoint", "energy_unit", "emissions_min", "emissions_max", "emissions_midpoint", "emissions_unit"])
                             writer.writerow([time_of_log, project_name, min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
                     
                         #print(f"\nTotal (estimated) server side CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
