@@ -11,6 +11,7 @@ from ecologits import EcoLogits
 import csv
 import os 
 from codecarbon import EmissionsTracker
+from datetime import datetime
 
 with warnings.catch_warnings():
     # ignore pydantic warnings https://github.com/BerriAI/litellm/issues/2832
@@ -235,6 +236,7 @@ class Chatter:
                     ecologits_codecarbon.start()
 
                     try: 
+                        time_of_log = datetime.now().isoformat(timespec='seconds')
                         energy = response.impacts.energy
                         min_energy = energy.value.min
                         max_energy = energy.value.max
@@ -253,8 +255,8 @@ class Chatter:
                         with open(file_path, mode="a", newline="") as f:
                             writer = csv.writer(f)
                             if not file_exists:
-                                writer.writerow(["project name","energy min", "energy max", "energy midpoint", "energy unit", "emissions min", "emissions max", "emissions midpoint", "emissions unit"])
-                            writer.writerow([project_name, min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
+                                writer.writerow(["time","project name","energy min", "energy max", "energy midpoint", "energy unit", "emissions min", "emissions max", "emissions midpoint", "emissions unit"])
+                            writer.writerow([time_of_log, project_name, min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
                     
                         #print(f"\nTotal (estimated) server side CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
                 
