@@ -858,7 +858,7 @@ def main():
         
     finally: 
         end_time = time.time()
-        time_taken = (end_time - start_time, 2)
+        time_taken = round(end_time - start_time, 2)
 
         overall_emissions = overall_codecarbon.stop()
         print(f"\nTotal CO2 emissions for overall process: {overall_emissions} kg", flush=True)
