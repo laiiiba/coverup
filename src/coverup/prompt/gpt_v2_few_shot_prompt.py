@@ -2,6 +2,12 @@ import typing as T
 from .prompter import *
 import coverup.codeinfo as codeinfo
 
+from .prompt_helper import (
+    FEW_SHOT_EXAMPLE_1_CODE,
+    FEW_SHOT_EXAMPLE_2_CODE,
+    FEW_SHOT_EXAMPLE_1_TESTS,
+    FEW_SHOT_EXAMPLE_2_TESTS,
+)
 
 class GptFewShotPrompter(Prompter):
     """Prompter using few shot technique, for GPT 4."""
@@ -16,6 +22,33 @@ class GptFewShotPrompter(Prompter):
         return [
             mk_message(f"""
 You are an expert Python test-driven developer.
+                       
+Below are examples of writing high-coverage pytest tests for Python functions within a module.
+
+=== Example 1 ===
+                       
+Code under test:
+```python
+{FEW_SHOT_EXAMPLE_1_CODE}
+```
+Corresponding tests:
+```python
+{FEW_SHOT_EXAMPLE_1_TESTS}
+``` 
+
+=== Example 2 ===
+                       
+Code under test:
+```python
+{FEW_SHOT_EXAMPLE_2_CODE}
+```
+Corresponding tests:
+```python
+{FEW_SHOT_EXAMPLE_2_TESTS}
+``` 
+
+=== Your Task ===
+                       
 The code below, extracted from {filename}, does not achieve full coverage:
 when tested, {segment.lines_branches_missing_do()} not execute.
 Create new pytest test functions that execute all missing lines and branches, always making
@@ -28,18 +61,6 @@ Please also make VERY SURE to clean up after the test, so as to avoid state poll
 use 'monkeypatch' or 'pytest-mock' if appropriate.
 Write as little top-level code as possible, and in particular do not include any top-level code
 calling into pytest.main or the test itself.
-
-Here is an example of the expected style:
-```python 
-import pytest
-from mymod.calculator import is_even
-
-def test_is_even_with_even_number():
-    assert is_even(2) is True
-
-def test_is_even_with_odd_number():
-    assert is_even(3) is False
-
 Respond ONLY with the Python code enclosed in backticks, without any explanation.
 ```python
 {segment.get_excerpt()}

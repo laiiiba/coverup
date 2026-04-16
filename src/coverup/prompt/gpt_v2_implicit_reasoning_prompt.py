@@ -3,8 +3,8 @@ from .prompter import *
 import coverup.codeinfo as codeinfo
 
 
-class GptChainOfThoughtPrompter(Prompter):
-    """Prompter using chain of thought technique, for GPT 4."""
+class GptImplicitReasoningPrompter(Prompter):
+    """Prompter using implicit reasoning (chain of thought inspired) technique, for GPT 4."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,8 +18,9 @@ class GptChainOfThoughtPrompter(Prompter):
 You are an expert Python test-driven developer.
 The code below, extracted from {filename}, does not achieve full coverage:
 when tested, {segment.lines_branches_missing_do()} not execute.
-Create new pytest test functions that execute all missing lines and branches, thinking STEP BY STEP, making sure you justify the reasonings to yourself. Always make
-sure that each test is correct and indeed improves coverage.
+Create new pytest test functions that execute all missing lines and branches, reasoning 
+internally about which inputs and execution paths cause each missing line and branch to execute before 
+writing each test. Always make sure that each test is correct and indeed improves coverage.
 Use the get_info tool function as necessary.
 Always send entire Python test scripts when proposing a new test or correcting one you
 previously proposed.

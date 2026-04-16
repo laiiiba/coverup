@@ -60,7 +60,7 @@ elif len() == 0:
 else:
     print("warning: multiple experiment_id values found", existing_experiments_ids)
 
-final["status"] = final["status"].fillna("fail")
+final["status"] = final["status"].fillna("timeout")
 final.to_csv("aggregated_results.csv", index=False)
 
 #checks
