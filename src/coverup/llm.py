@@ -242,7 +242,7 @@ class Chatter:
                         max_energy = energy.value.max
                         mid_energy = (min_energy + max_energy)/2
                         energy_unit = energy.unit 
-                        '''consider using nowtricity instead'''
+
                         gwp = response.impacts.gwp
                         min_emissions = gwp.value.min
                         max_emissions = gwp.value.max
@@ -259,11 +259,10 @@ class Chatter:
                             writer.writerow([project_name, min_energy, max_energy, mid_energy, energy_unit, min_emissions, max_emissions, mid_emissions, emissions_unit])
                     
                         #print(f"\nTotal (estimated) server side CO2 emissions for LLM call: {mid_emissions} kgCO2eq", flush=True)
-                
                     except Exception as e:
                         print(f"Failed to log energy: {e}")
-                    
-                    ecologits_codecarbon.stop()
+                    finally:
+                        ecologits_codecarbon.stop()
                 
                     return response           
 
