@@ -1,5 +1,0 @@
-include README.rst
-include LICENSE
-include CHANGELOG
-include flutils/__init__.pyi
-include flutils/py.typed
