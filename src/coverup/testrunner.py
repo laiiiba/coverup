@@ -85,42 +85,6 @@ def measure_suite_coverage(*, tests_dir: Path, source_dir: T.Optional[Path], pyt
         print(f"\nTotal CO2 emissions for suite coverage: {suite_coverage_emissions} kgCO2eq", flush=True)
 
 
-def measure_suite_mutation_score(*, project_dir: Path, trace=None) -> float:
-    """Runs mutation tests and returns the mutation score."""
-
-    try:
-        run_command = ["mutmut", "run"]
-        if trace: 
-            trace(run_command)
-    
-        run_result = subprocess.run(run_command, cwd = project_dir, check = True, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, text = True)
-
-        output = run_result.stdout
-        
-        matches = re.findall(r"🎉\s*(\d+).*🫥\s*(\d+)", output)
-        if not matches:
-            print("Could not obtain results from mutmut output.")
-            print(output)
-            return None 
-        
-        last_match = matches[-1]
-        killed_mutants = int(last_match[0])
-        survived_mutants = int(last_match[1])
-
-        total_mutants = killed_mutants + survived_mutants
-
-        if total_mutants > 0:
-            mutation_score = killed_mutants / total_mutants
-        else:
-            mutation_score = 0.0
-
-        return mutation_score
-
-    except Exception as e:
-        print("Cannot obtain mutation results:", e)
-        return None 
-
-
 
 
 

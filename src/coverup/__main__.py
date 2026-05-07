@@ -1,7 +1,7 @@
 import coverup
 from codecarbon import EmissionsTracker
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # this is not the main which runs, tested using the print statement.
     print("MAIN WRAPPER RUNNING", flush=True)
     overall_codecarbon = EmissionsTracker(project_name = 'coverup', experiment_id = 'overall')
     overall_codecarbon.start()
